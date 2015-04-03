@@ -75,13 +75,13 @@ public class FastScroller extends LinearLayout
       case MotionEvent.ACTION_DOWN:
         if(event.getX()<handle.getX())
           return false;
-        handle.setSelected(true);
-      case MotionEvent.ACTION_MOVE:
-        setPosition(event.getY());
         if(currentAnimator!=null)
           currentAnimator.cancel();
         if(bubble.getVisibility()==INVISIBLE)
           showBubble();
+        handle.setSelected(true);
+      case MotionEvent.ACTION_MOVE:
+        setPosition(event.getY());
         setRecyclerViewPosition(event.getY());
         return true;
       case MotionEvent.ACTION_UP:
