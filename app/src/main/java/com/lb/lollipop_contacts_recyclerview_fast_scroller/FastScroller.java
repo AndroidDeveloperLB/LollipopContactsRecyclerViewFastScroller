@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,19 +31,19 @@ public class FastScroller extends LinearLayout
 
   private ObjectAnimator currentAnimator=null;
 
-  public FastScroller(final android.content.Context context,final android.util.AttributeSet attrs,final int defStyleAttr)
+  public FastScroller(final Context context,final AttributeSet attrs,final int defStyleAttr)
     {
     super(context,attrs,defStyleAttr);
     initialise(context);
     }
 
-  public FastScroller(final android.content.Context context)
+  public FastScroller(final Context context)
     {
     super(context);
     initialise(context);
     }
 
-  public FastScroller(final android.content.Context context,final android.util.AttributeSet attrs)
+  public FastScroller(final Context context,final AttributeSet attrs)
     {
     super(context,attrs);
     initialise(context);
