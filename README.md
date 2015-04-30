@@ -16,5 +16,5 @@ and here's how I managed to mimic its fast-scroller:
  1. It's a POC, so it's not so comfortable to customize, but on the other hand, you can put any style you wish.
  2. I think there are issues when changing the orientation.
  3. Not a library. I hope I can think of a way that this could be a nice library
- 4. Minimal API is 13 . I'd like it to be lower.
+ 4. Minimal API is 11 . I'd like it to be lower.
  5. Supports only LinearLayoutManager for now. Wish it would also support Gridlayoutmanager .
