@@ -18,8 +18,7 @@ import com.lb.lollipopcontactsrecyclerviewfastscroller.R;
 
 import static android.support.v7.widget.RecyclerView.OnScrollListener;
 
-public class FastScroller extends LinearLayout
-  {
+public class FastScroller extends LinearLayout{
   private static final int BUBBLE_ANIMATION_DURATION=100;
   private static final int TRACK_SNAP_RANGE=5;
 
@@ -82,8 +81,9 @@ public class FastScroller extends LinearLayout
           showBubble();
         handle.setSelected(true);
       case MotionEvent.ACTION_MOVE:
-        setPosition(event.getY());
-        setRecyclerViewPosition(event.getY());
+        final float y=event.getY();
+        setPosition(y);
+        setRecyclerViewPosition(y);
         return true;
       case MotionEvent.ACTION_UP:
       case MotionEvent.ACTION_CANCEL:
@@ -148,29 +148,27 @@ public class FastScroller extends LinearLayout
     if(currentAnimator!=null)
       currentAnimator.cancel();
     currentAnimator=ObjectAnimator.ofFloat(bubble,"alpha",1f,0f).setDuration(BUBBLE_ANIMATION_DURATION);
-    currentAnimator.addListener(new AnimatorListenerAdapter()
-    {
-    @Override
-    public void onAnimationEnd(Animator animation)
-      {
-      super.onAnimationEnd(animation);
-      bubble.setVisibility(INVISIBLE);
-      currentAnimator=null;
-      }
+    currentAnimator.addListener(new AnimatorListenerAdapter(){
+      @Override
+      public void onAnimationEnd(Animator animation)
+        {
+        super.onAnimationEnd(animation);
+        bubble.setVisibility(INVISIBLE);
+        currentAnimator=null;
+        }
 
-    @Override
-    public void onAnimationCancel(Animator animation)
-      {
-      super.onAnimationCancel(animation);
-      bubble.setVisibility(INVISIBLE);
-      currentAnimator=null;
-      }
+      @Override
+      public void onAnimationCancel(Animator animation)
+        {
+        super.onAnimationCancel(animation);
+        bubble.setVisibility(INVISIBLE);
+        currentAnimator=null;
+        }
     });
     currentAnimator.start();
     }
 
-  private class ScrollListener extends OnScrollListener
-    {
+  private class ScrollListener extends OnScrollListener{
     @Override
     public void onScrolled(RecyclerView rv,int dx,int dy)
       {
@@ -182,12 +180,12 @@ public class FastScroller extends LinearLayout
       int position;
       if(firstVisiblePosition==0)
         position=0;
-      else if(lastVisiblePosition==itemCount-1)
-        position=itemCount-1;
+      else if(lastVisiblePosition==itemCount)
+        position=itemCount;
       else
-        position=firstVisiblePosition;
+        position=(int)(((float)firstVisiblePosition/(((float)itemCount-(float)visibleRange)))*(float)itemCount);
       float proportion=(float)position/(float)itemCount;
       setPosition(height*proportion);
       }
-    }
   }
+}
