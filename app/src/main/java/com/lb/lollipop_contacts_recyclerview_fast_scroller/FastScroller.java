@@ -6,8 +6,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -82,7 +84,7 @@ public class FastScroller extends LinearLayout{
         handle.setSelected(true);
       case MotionEvent.ACTION_MOVE:
         final float y=event.getY();
-        setPosition(y);
+        setBubbleAndHandlePosition(y);
         setRecyclerViewPosition(y);
         return true;
       case MotionEvent.ACTION_UP:
@@ -113,7 +115,9 @@ public class FastScroller extends LinearLayout{
       else
         proportion=y/(float)height;
       int targetPos=getValueInRange(0,itemCount-1,(int)(proportion*(float)itemCount));
-      recyclerView.scrollToPosition(targetPos);
+      Log.d("AppLog","targetPos:"+targetPos);
+      ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(targetPos,0);
+//      recyclerView.oPositionWithOffset(targetPos);
       String bubbleText=((BubbleTextGetter)recyclerView.getAdapter()).getTextToShowInBubble(targetPos);
       bubble.setText(bubbleText);
       }
@@ -125,7 +129,7 @@ public class FastScroller extends LinearLayout{
     return Math.min(minimum,max);
     }
 
-  private void setPosition(float y)
+  private void setBubbleAndHandlePosition(float y)
     {
     int bubbleHeight=bubble.getHeight();
     int handleHeight=handle.getHeight();
@@ -185,7 +189,7 @@ public class FastScroller extends LinearLayout{
       else
         position=(int)(((float)firstVisiblePosition/(((float)itemCount-(float)visibleRange)))*(float)itemCount);
       float proportion=(float)position/(float)itemCount;
-      setPosition(height*proportion);
+      setBubbleAndHandlePosition(height*proportion);
       }
   }
 }
