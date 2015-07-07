@@ -3,6 +3,10 @@ A sample of how to mimic the way that the contacts app handles a Fast-Scroller f
 
 This POC is based on [this website's tutorial](https://blog.stylingandroid.com/recyclerview-fastscroll-part-2/#comment-67201), but with a lot of fixes, optimizations, cleaner code, and of course styling like on Lollipop's contacts app.
 
+Demo:
+
+![enter image description here](https://raw.githubusercontent.com/AndroidDeveloperLB/LollipopContactsRecyclerViewFastScroller/master/demo.gif)
+
 **Screenshots**
 
 Here's how the contacts app of Android Lollipop (5.0.x) looks like:
