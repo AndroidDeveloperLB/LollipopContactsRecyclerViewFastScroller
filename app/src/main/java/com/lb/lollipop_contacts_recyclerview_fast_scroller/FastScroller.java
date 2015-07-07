@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -115,7 +114,6 @@ public class FastScroller extends LinearLayout{
       else
         proportion=y/(float)height;
       int targetPos=getValueInRange(0,itemCount-1,(int)(proportion*(float)itemCount));
-      Log.d("AppLog","targetPos:"+targetPos);
       ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(targetPos,0);
 //      recyclerView.oPositionWithOffset(targetPos);
       String bubbleText=((BubbleTextGetter)recyclerView.getAdapter()).getTextToShowInBubble(targetPos);
