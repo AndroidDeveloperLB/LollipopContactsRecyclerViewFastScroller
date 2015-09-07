@@ -102,9 +102,7 @@ public class FastScroller extends LinearLayout{
         {
         if (handle.isSelected())
           return;
-        int verticalScrollOffset = recyclerView.computeVerticalScrollOffset();
-        int verticalScrollRange = recyclerView.computeVerticalScrollRange();
-        float proportion = (float) verticalScrollOffset / ((float) verticalScrollRange - height);
+        float proportion = (float) recyclerView.computeVerticalScrollOffset() / ((float) recyclerView.computeVerticalScrollRange() - height);
         setBubbleAndHandlePosition(height * proportion);
       }
     };
