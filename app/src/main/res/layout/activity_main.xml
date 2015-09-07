@@ -1,27 +1,28 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/recyclerview"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:scrollbars="none"
-    tools:context=".MainActivity"/>
+    android:layout_height="match_parent">
 
-  <com.lb.lollipop_contacts_recyclerview_fast_scroller.FastScroller
-    android:id="@+id/fastscroller"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_alignTop="@id/recyclerview"
-    android:layout_alignBottom="@id/recyclerview"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    tools:ignore="RtlCompat"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:scrollbars="none"
+        tools:context=".MainActivity"/>
+
+    <com.lb.lollipop_contacts_recyclerview_fast_scroller.FastScroller
+        android:id="@+id/fastscroller"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/recyclerview"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/recyclerview"
+        />
 </RelativeLayout>
 
