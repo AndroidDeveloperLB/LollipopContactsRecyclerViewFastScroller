@@ -7,7 +7,7 @@
     android:icon="@mipmap/ic_launcher"
     android:theme="@style/AppTheme">
     <activity
-      android:name="com.lb.lollipop_contacts_recyclerview_fast_scroller.MainActivity"
+      android:name="com.lb.recyclerview_fast_scroller.MainActivity"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name">
 

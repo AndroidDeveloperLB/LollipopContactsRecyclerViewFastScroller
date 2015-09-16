@@ -1,10 +1,12 @@
-package com.lb.lollipop_contacts_recyclerview_fast_scroller;
+package com.lb.recyclerview_fast_scroller;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller.BubbleTextGetter;
 
 import java.util.ArrayList;
 import java.util.List;
