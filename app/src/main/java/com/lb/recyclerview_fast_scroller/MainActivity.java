@@ -91,30 +91,57 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new RecyclerViewFragment();
+            final RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
+            recyclerViewFragment.numberOfItems = getFragmentItemsCount(position);
+            return recyclerViewFragment;
+        }
+
+        private int getFragmentItemsCount(int pos) {
+            return (int) Math.pow(4, (getCount() - pos));
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 5;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Tab " + position;
+            return "itemsCount: " + getFragmentItemsCount(position);
         }
     }
 
 
     public static class RecyclerViewFragment extends Fragment {
+        public int numberOfItems;
+
         @Nullable
         @Override
         public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_recycler_view, container, false);
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
-            recyclerView.setAdapter(new LargeAdapter());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            RecyclerViewFastScroller fastScroller = (RecyclerViewFastScroller) rootView.findViewById(R.id.fastscroller);
+            final LargeAdapter adapter = new LargeAdapter(numberOfItems);
+            recyclerView.setAdapter(adapter);
+            final RecyclerViewFastScroller fastScroller = (RecyclerViewFastScroller) rootView.findViewById(R.id.fastscroller);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+                @Override
+                public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
+                    super.onLayoutChildren(recycler, state);
+                    //TODO if the items are filtered, considered hiding the fast scroller here
+                    final int firstVisibleItemPosition = findFirstVisibleItemPosition();
+                    if (firstVisibleItemPosition != 0) {
+                        // this avoids trying to handle un-needed calls
+                        if (firstVisibleItemPosition == -1)
+                            //not initialized, or no items shown, so hide fast-scroller
+                            fastScroller.setVisibility(View.GONE);
+                        return;
+                    }
+                    final int lastVisibleItemPosition = findLastVisibleItemPosition();
+                    int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+                    //if all items are shown, hide the fast-scroller
+                    fastScroller.setVisibility(adapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
+                }
+            });
             fastScroller.setRecyclerView(recyclerView);
             fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
             return rootView;

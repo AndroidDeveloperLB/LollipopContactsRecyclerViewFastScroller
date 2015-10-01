@@ -12,13 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHolder> implements BubbleTextGetter {
-    private static final int SIZE = 1000;
     private final List<String> items;
 
-    public LargeAdapter() {
+    public LargeAdapter(int numberOfItems) {
         List<String> items = new ArrayList<>();
         java.util.Random r = new java.util.Random();
-        for (int i = 0; i < SIZE; i++)
+        for (int i = 0; i < numberOfItems; i++)
             items.add(((char) ('A' + r.nextInt('Z' - 'A'))) + " " + Integer.toString(i));
         java.util.Collections.sort(items);
         this.items = items;
