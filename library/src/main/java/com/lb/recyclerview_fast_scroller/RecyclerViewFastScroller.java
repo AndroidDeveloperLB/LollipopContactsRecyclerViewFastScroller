@@ -27,6 +27,18 @@ public class RecyclerViewFastScroller extends LinearLayout {
     private int height;
     private boolean isInitialized = false;
     private ObjectAnimator currentAnimator = null;
+    
+    private final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
+            if (bubble == null || handle.isSelected())
+                return;
+            final int verticalScrollOffset = recyclerView.computeVerticalScrollOffset();
+            final int verticalScrollRange = recyclerView.computeVerticalScrollRange();
+            float proportion = (float) verticalScrollOffset / ((float) verticalScrollRange - height);
+            setBubbleAndHandlePosition(height * proportion);
+        }
+    };
 
     public interface BubbleTextGetter {
         String getTextToShowInBubble(int pos);
@@ -96,20 +108,28 @@ public class RecyclerViewFastScroller extends LinearLayout {
         return super.onTouchEvent(event);
     }
 
-    public void setRecyclerView(RecyclerView recyclerView) {
+    public void setRecyclerView(final RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
-        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(onScrollListener);
+        recyclerView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
             @Override
-            public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
+            public boolean onPreDraw() {
+                recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
                 if (bubble == null || handle.isSelected())
-                    return;
+                    return true;
                 final int verticalScrollOffset = recyclerView.computeVerticalScrollOffset();
                 final int verticalScrollRange = recyclerView.computeVerticalScrollRange();
                 float proportion = (float) verticalScrollOffset / ((float) verticalScrollRange - height);
                 setBubbleAndHandlePosition(height * proportion);
+                return true;
             }
-        };
-        recyclerView.addOnScrollListener(onScrollListener);
+        });
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        recyclerView.removeOnScrollListener(onScrollListener);
     }
 
     private void setRecyclerViewPosition(float y) {
