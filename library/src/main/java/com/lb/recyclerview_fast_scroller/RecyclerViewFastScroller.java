@@ -14,6 +14,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -111,7 +112,7 @@ public class RecyclerViewFastScroller extends LinearLayout {
     public void setRecyclerView(final RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         recyclerView.addOnScrollListener(onScrollListener);
-        recyclerView.getViewTreeObserver().addOnPreDrawListener(new OnPreDrawListener() {
+        recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
