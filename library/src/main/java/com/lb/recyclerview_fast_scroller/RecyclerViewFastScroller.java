@@ -130,7 +130,8 @@ public class RecyclerViewFastScroller extends LinearLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        recyclerView.removeOnScrollListener(onScrollListener);
+        if (recyclerView != null)
+            recyclerView.removeOnScrollListener(onScrollListener);
     }
 
     private void setRecyclerViewPosition(float y) {
