@@ -118,12 +118,11 @@ public class RecyclerViewFastScroller extends LinearLayout {
                 return;
             recyclerView.addOnScrollListener(onScrollListener);
         }
-        if (recyclerView != null) {
-            final ViewTreeObserver viewTreeObserver = recyclerView.getViewTreeObserver();
-            viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        if (recyclerView != null)
+            recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
-                    viewTreeObserver.removeOnPreDrawListener(this);
+                    recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
                     if (bubble == null || handle.isSelected())
                         return true;
                     final int verticalScrollOffset = recyclerView.computeVerticalScrollOffset();
@@ -133,7 +132,6 @@ public class RecyclerViewFastScroller extends LinearLayout {
                     return true;
                 }
             });
-        }
     }
 
     @Override
