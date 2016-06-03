@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,12 +31,7 @@ public class RecyclerViewFastScroller extends LinearLayout {
     private final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
-            if (bubble == null || handle.isSelected())
-                return;
-            final int verticalScrollOffset = recyclerView.computeVerticalScrollOffset();
-            final int verticalScrollRange = recyclerView.computeVerticalScrollRange();
-            float proportion = (float) verticalScrollOffset / ((float) verticalScrollRange - height);
-            setBubbleAndHandlePosition(height * proportion);
+            updateBubbleAndHandlePosition();
         }
     };
 
@@ -81,6 +75,7 @@ public class RecyclerViewFastScroller extends LinearLayout {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         height = h;
+        updateBubbleAndHandlePosition();
     }
 
     @Override
@@ -118,20 +113,6 @@ public class RecyclerViewFastScroller extends LinearLayout {
                 return;
             recyclerView.addOnScrollListener(onScrollListener);
         }
-        if (recyclerView != null)
-            recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    if (bubble == null || handle.isSelected())
-                        return true;
-                    final int verticalScrollOffset = recyclerView.computeVerticalScrollOffset();
-                    final int verticalScrollRange = recyclerView.computeVerticalScrollRange();
-                    float proportion = (float) verticalScrollOffset / ((float) verticalScrollRange - height);
-                    setBubbleAndHandlePosition(height * proportion);
-                    return true;
-                }
-            });
     }
 
     @Override
@@ -164,6 +145,16 @@ public class RecyclerViewFastScroller extends LinearLayout {
     private int getValueInRange(int min, int max, int value) {
         int minimum = Math.max(min, value);
         return Math.min(minimum, max);
+    }
+
+    private void updateBubbleAndHandlePosition() {
+        if (bubble == null || handle.isSelected())
+            return;
+
+        final int verticalScrollOffset = recyclerView.computeVerticalScrollOffset();
+        final int verticalScrollRange = recyclerView.computeVerticalScrollRange();
+        float proportion = (float) verticalScrollOffset / ((float) verticalScrollRange - height);
+        setBubbleAndHandlePosition(height * proportion);
     }
 
     private void setBubbleAndHandlePosition(float y) {
