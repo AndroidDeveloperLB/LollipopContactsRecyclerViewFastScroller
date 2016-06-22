@@ -27,6 +27,7 @@ public class RecyclerViewFastScroller extends LinearLayout {
     private int height;
     private boolean isInitialized = false;
     private ObjectAnimator currentAnimator = null;
+    private boolean needTouchEventOnHandleYToScroll = true;
 
     private final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -62,6 +63,10 @@ public class RecyclerViewFastScroller extends LinearLayout {
         setClipChildren(false);
     }
 
+    public void setNeedTouchEventOnHandleYToScroll(boolean needTouchEventOnHandleYToScroll) {
+        this.needTouchEventOnHandleYToScroll = needTouchEventOnHandleYToScroll;
+    }
+
     public void setViewsToUse(@LayoutRes int layoutResId, @IdRes int bubbleResId, @IdRes int handleResId) {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(layoutResId, this, true);
@@ -83,7 +88,7 @@ public class RecyclerViewFastScroller extends LinearLayout {
         final int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                if (event.getX() < handle.getX() - ViewCompat.getPaddingStart(handle))
+                if (!isTouchEventOnHandle(event))
                     return false;
                 if (currentAnimator != null)
                     currentAnimator.cancel();
@@ -102,6 +107,26 @@ public class RecyclerViewFastScroller extends LinearLayout {
                 return true;
         }
         return super.onTouchEvent(event);
+    }
+
+    private boolean isTouchEventOnHandle(@NonNull MotionEvent event) {
+        return isTouchEventOnHandleX(event) && (!needTouchEventOnHandleYToScroll || isTouchEventOnHandleY(event));
+    }
+
+    private boolean isTouchEventOnHandleX(@NonNull MotionEvent event) {
+        float eventX = event.getX();
+        float handleX = handle.getX();
+
+        return eventX >= handleX - ViewCompat.getPaddingStart(handle);
+    }
+
+
+    private boolean isTouchEventOnHandleY(@NonNull MotionEvent event) {
+        float eventY = event.getY();
+        float handleY = handle.getY();
+        float handleH = handle.getHeight();
+
+        return eventY >= handleY && eventY <= handleY + handleH;
     }
 
     public void setRecyclerView(final RecyclerView recyclerView) {
