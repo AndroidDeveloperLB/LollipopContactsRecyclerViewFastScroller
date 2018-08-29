@@ -137,8 +137,14 @@ public class RecyclerViewFastScroller extends LinearLayout {
             final int targetPos = getValueInRange(0, itemCount - 1, (int) (proportion * (float) itemCount));
             ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(targetPos, 0);
             final String bubbleText = ((BubbleTextGetter) recyclerView.getAdapter()).getTextToShowInBubble(targetPos);
-            if (bubble != null)
+            if (bubble != null) {
                 bubble.setText(bubbleText);
+                if (TextUtils.isEmpty(bubbleText)) {
+                    hideBubble();
+                } else if (bubble.getVisibility() == View.INVISIBLE) {
+                    showBubble();
+                }
+            }
         }
     }
 
