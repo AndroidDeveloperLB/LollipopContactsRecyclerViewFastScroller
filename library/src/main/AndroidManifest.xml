@@ -1,7 +1,5 @@
-<manifest
-    package="com.lb.recyclerview_fast_scroller"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.lb.recyclerview_fast_scroller">
 
-    <application android:allowBackup="true"/>
+  <application android:allowBackup="true" />
 
 </manifest>

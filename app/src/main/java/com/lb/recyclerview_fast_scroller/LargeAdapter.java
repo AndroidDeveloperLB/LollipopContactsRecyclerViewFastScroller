@@ -1,6 +1,5 @@
 package com.lb.recyclerview_fast_scroller;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,20 @@ import com.lb.recyclerview_fast_scroller.RecyclerViewFastScroller.BubbleTextGett
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHolder> implements BubbleTextGetter {
-    private final List<String> items;
+    private List<String> items;
 
     public LargeAdapter(int numberOfItems) {
+        setItemsCount(numberOfItems);
+    }
+
+    public void setItemsCount(int numberOfItems) {
         List<String> items = new ArrayList<>();
         java.util.Random r = new java.util.Random();
         for (int i = 0; i < numberOfItems; i++)
-            items.add(((char) ('A' + r.nextInt('Z' - 'A'))) + " " + Integer.toString(i));
+            items.add(((char) ('A' + r.nextInt('Z' - 'A'))) + " " + i);
         java.util.Collections.sort(items);
         this.items = items;
     }
@@ -50,7 +55,7 @@ public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHo
 
         private ViewHolder(View itemView) {
             super(itemView);
-            this.textView = (TextView) itemView.findViewById(android.R.id.text1);
+            this.textView = itemView.findViewById(android.R.id.text1);
         }
 
         public void setText(CharSequence text) {

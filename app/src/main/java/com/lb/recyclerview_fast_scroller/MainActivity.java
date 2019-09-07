@@ -3,52 +3,39 @@ package com.lb.recyclerview_fast_scroller;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.lb.lollipopcontactsrecyclerviewfastscroller.R;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.State;
+import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //note : part of the design library sample code was taken from : https://github.com/sitepoint-editors/Design-Demo/
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(findViewById(R.id.coordinator), "I'm a Snackbar", Snackbar.LENGTH_LONG).setAction("Action", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(MainActivity.this, "Snackbar Action", Toast.LENGTH_LONG).show();
-                    }
-                }).show();
-            }
-        });
 
         DesignDemoPagerAdapter adapter = new DesignDemoPagerAdapter(getSupportFragmentManager());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPager viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        TabLayout tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -58,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         String url = null;
@@ -92,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             final RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
-            recyclerViewFragment.numberOfItems = getFragmentItemsCount(position);
+            Bundle args = new Bundle();
+            args.putInt(RecyclerViewFragment.ITEMS_COUNT, getFragmentItemsCount(position));
+            recyclerViewFragment.setArguments(args);
             return recyclerViewFragment;
         }
 
@@ -113,29 +101,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static class RecyclerViewFragment extends Fragment {
+        public static final String ITEMS_COUNT = "ITEMS_COUNT";
         public int numberOfItems;
 
         @Nullable
         @Override
         public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+            numberOfItems = getArguments().getInt(ITEMS_COUNT);
             View rootView = inflater.inflate(R.layout.fragment_recycler_view, container, false);
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+            RecyclerView recyclerView = rootView.findViewById(R.id.recyclerview);
             final LargeAdapter adapter = new LargeAdapter(numberOfItems);
             recyclerView.setAdapter(adapter);
-            final RecyclerViewFastScroller fastScroller = (RecyclerViewFastScroller) rootView.findViewById(R.id.fastscroller);
+            final RecyclerViewFastScroller fastScroller = rootView.findViewById(R.id.fastscroller);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
                 @Override
-                public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
-                    super.onLayoutChildren(recycler, state);
-                    //TODO if the items are filtered, considered hiding the fast scroller here
+                public void onLayoutCompleted(final State state) {
+                    super.onLayoutCompleted(state);
                     final int firstVisibleItemPosition = findFirstVisibleItemPosition();
-                    if (firstVisibleItemPosition != 0) {
-                        // this avoids trying to handle un-needed calls
-                        if (firstVisibleItemPosition == -1)
-                            //not initialized, or no items shown, so hide fast-scroller
-                            fastScroller.setVisibility(View.GONE);
-                        return;
-                    }
+                    //Log.d("AppLog", "onLayoutCompleted firstVisibleItemPosition:"+firstVisibleItemPosition);
                     final int lastVisibleItemPosition = findLastVisibleItemPosition();
                     int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
                     //if all items are shown, hide the fast-scroller
@@ -144,6 +127,13 @@ public class MainActivity extends AppCompatActivity {
             });
             fastScroller.setRecyclerView(recyclerView);
             fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
+            //new Handler().postDelayed(new Runnable() {
+            //    @Override
+            //    public void run() {
+            //        adapter.setItemsCount(new Random().nextInt(20));
+            //        adapter.notifyDataSetChanged();
+            //    }
+            //}, 2000L);
             return rootView;
         }
     }
