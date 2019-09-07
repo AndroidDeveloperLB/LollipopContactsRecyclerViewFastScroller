@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.lb.lollipopcontactsrecyclerviewfastscroller.R;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //note : part of the design library sample code was taken from : https://github.com/sitepoint-editors/Design-Demo/
 
-        DesignDemoPagerAdapter adapter = new DesignDemoPagerAdapter(getSupportFragmentManager());
+        DesignDemoPagerAdapter adapter = new DesignDemoPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         ViewPager viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = findViewById(R.id.tablayout);
@@ -70,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     static class DesignDemoPagerAdapter extends FragmentStatePagerAdapter {
-
-        public DesignDemoPagerAdapter(FragmentManager fm) {
-            super(fm);
+        public DesignDemoPagerAdapter(@NonNull final FragmentManager fm, final int behavior) {
+            super(fm, behavior);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             final RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();

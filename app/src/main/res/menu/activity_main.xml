@@ -7,11 +7,11 @@
       <group
         android:checkableBehavior="none" android:menuCategory="container">
         <item
-          android:id="@+id/menuItem_current_repository_website" android:title="@string/repository_website"></item>
+          android:id="@+id/menuItem_current_repository_website" android:title="@string/repository_website" />
         <item
-          android:id="@+id/menuItem_all_my_repositories" android:title="@string/all_my_repositories"></item>
+          android:id="@+id/menuItem_all_my_repositories" android:title="@string/all_my_repositories" />
         <item
-          android:id="@+id/menuItem_all_my_apps" android:title="@string/all_my_apps"></item>
+          android:id="@+id/menuItem_all_my_apps" android:title="@string/all_my_apps" />
       </group>
     </menu>
   </item>
