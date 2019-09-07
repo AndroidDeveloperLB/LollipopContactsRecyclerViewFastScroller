@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onLayoutCompleted(final State state) {
                     super.onLayoutCompleted(state);
                     final int firstVisibleItemPosition = findFirstVisibleItemPosition();
-                    //Log.d("AppLog", "onLayoutCompleted firstVisibleItemPosition:"+firstVisibleItemPosition);
                     final int lastVisibleItemPosition = findLastVisibleItemPosition();
                     int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
                     //if all items are shown, hide the fast-scroller
